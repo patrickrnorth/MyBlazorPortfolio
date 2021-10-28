@@ -1,9 +1,86 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,700;0,900;1,400&display=swap');
 
+/* Table of Contents
+     1. General
+     2. Backgrounds
+     3. Typography
+     4. Components (buttons, cards etc.)
+     5. Custom responsive styles
+     6. Admin area
+     7. QuillJS
+     8. Blazor default styles
+*/
+
+/* 1. General */
+.shadow {
+    box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.4) !important;
+}
+
+.shadow-no-hover {
+    box-shadow: 0 0.15rem 0.4rem rgba(0, 0, 0, 0.5) !important;
+}
+
+.shadow:hover {
+    box-shadow: 0 0.15rem 0.4rem rgba(0, 0, 0, 0.8) !important;
+}
+
+.w-8 {
+    width: 8%;
+}
+
+.w-14 {
+    width: 14%;
+}
+
+.w-15 {
+    width: 15%;
+}
+
+.w-35 {
+    width: 35%;
+}
+
+.w-40 {
+    width: 40%;
+}
+
+.flex-shrink-1 {
+    flex-shrink: 1;
+}
+
+.z-index-5 {
+    z-index: 5;
+}
+
+.min-vh-90 {
+    min-height: 90vh !important;
+}
+
+/* 2. Backgrounds */
+.bg-lightgray {
+    background-color: #EBEBEB;
+}
+
+.bg-motherboard-dev {
+    background-image: url("../assets/img/publicbackgrounds/bg-motherboard-dev.jpg");
+    background-repeat: no-repeat;
+    
+}
+
+.bg-white-94 {
+    background-color: rgba(255, 255, 255, 0.94);
+}
+
+/* 3. Typography */
 body {
     font-family: 'Roboto', sans-serif;
 }
 
+.f-size-3 {
+    font-size: 3rem;
+}
+
+/* 4. Components (buttons, cards etc.) */
 .btn {
     border-radius: 0px;
 }
@@ -12,53 +89,88 @@ body {
     border-radius: 0px;
 }
 
-.shadow {
-    box-shadow: 0 0.3rem 0.6rem rgba(0,0,0,0.4) !important;
+.btn-update {
+    color: #FFF;
+    background-color: #cfb300;
+    border-color: #cfb300;
 }
 
-shadow-no-hover {
-    box-shadow: 0 0.15rem 0.4rem rgba(0,0,0,0.5) !important;
+    .btn-update:hover {
+        color: #FFF;
+        background-color: #a68f00;
+        border-color: #a68f00;
+    }
+
+.admin-index-thumbnail-image {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
-shadow:hover {
-    box-shadow: 0 0.15rem 0.4rem rgba(0,0,0,0.8) !important;
+.admin-crud-form-thumbnail-image {
+    display: block;
+    max-width: 50%;
 }
 
-.bg-motherboard-dev{
-    background-image: url(../assets/img/publicbackgrounds/bg-motherboard-dev.jpg);
+.hover-bg-white:hover {
+    background-color: #fff;
 }
 
-.min-vh-90 {
-    min-height: 90vh !important;
-}
-
-bg-white-94 {
-    background-color: rgba(255,255,255,0.94);
-}
-
-f-size-3 {
-    font-size: 3rem;
-}
-
-@media (max-width: 992px)
-{
+/* 5. Custom responsive styles */
+@media (max-width: 992px) {
     .md-and-smaller-my-3 {
         margin-top: 1rem !important;
         margin-bottom: 1rem !important;
     }
 
-    .bg-motherboared-dev {
+    .bg-motherboard-dev {
         background-image: url("../assets/img/publicbackgrounds/bg-motherboard.jpg");
+    }
+
+    .md-and-smaller-d-none {
+        display: none !important;
     }
 }
 
-@media (min-width: 992px)
-{
+@media (min-width: 992px) {
     .md-f-size-1-5 {
         font-size: 1.5rem;
     }
 }
 
+/* 6. Admin area */
+.admin-area-main {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background-color: #404040;
+}
+
+.admin-area-content {
+    overflow-y: scroll;
+    padding: 10vw 10vw;
+}
+
+/* 7. QuillJS */
+.ql-container.ql-snow {
+    border: none;
+}
+
+.ql-editor {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    padding: 0px;
+}
+
+    .ql-editor .ql-video {
+        width: 640px;
+        height: 360px;
+    }
+
+/* 8. Blazor default styles */
 .validation-message {
     color: red;
 }
