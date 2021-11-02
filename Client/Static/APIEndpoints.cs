@@ -6,7 +6,7 @@
         internal const string ServerBaseUrl = "https://localhost:5003";
 
 #else
-        interal const string ServerBaseUrl = "https://patricknorthserver.azurewebsites.net";
+        internal const string ServerBaseUrl = "https://patricknorthserver.azurewebsites.net";
 #endif
 
         internal readonly static string s_categories = $"{ServerBaseUrl}/api/categories";
