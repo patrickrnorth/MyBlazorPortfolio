@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Shared\" />
+    <Folder Include="wwwroot\assets\img\skillsicons\" />
     <Folder Include="wwwroot\assets\img\publicbackgrounds\" />
   </ItemGroup>
 
