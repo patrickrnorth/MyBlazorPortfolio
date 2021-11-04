@@ -1,6 +1,13 @@
 ﻿@page "/portfolio"
 
 <Client.Components.Public.Shared.Navbar />
+
+@if(_showingExamplePortfolioProjectModalWindow == true)
+{
+    <Client.Components.Public.Portfolio.ExamplePortfolioProjectModalWindow ParentMethodToCallOnClickBtnClose ="() => _showingExamplePortfolioProjectModalWindow = false" />
+}
+
+
 <main class="container min-vh-90 py-5">
     <div class="row">
         <div class="col">
@@ -20,7 +27,7 @@
                             </p>
                         </div>
 
-                        <button class="btn btn-primary stretched-link">
+                        <button @onclick="() => _showingExamplePortfolioProjectModalWindow = true" class="btn btn-primary stretched-link">
                             <i class="fas fa-info-circle"></i> More Information
                         </button>                    
                     </div>
@@ -37,7 +44,7 @@
                             </p>
                         </div>
 
-                        <button class="btn btn-primary stretched-link">
+                        <button @onclick="() => _showingExamplePortfolioProjectModalWindow = true" class="btn btn-primary stretched-link">
                             <i class="fas fa-info-circle"></i> More Information
                         </button>                    
                     </div>
@@ -54,7 +61,7 @@
                             </p>
                         </div>
 
-                        <button class="btn btn-primary stretched-link">
+                        <button @onclick="() => _showingExamplePortfolioProjectModalWindow = true" class="btn btn-primary stretched-link">
                             <i class="fas fa-info-circle"></i> More Information
                         </button>                    
                     </div>
@@ -70,6 +77,8 @@
 
 @code
 {
+    private bool _showingExamplePortfolioProjectModalWindow;
+
     private string _exampleExcerpt = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida eget tellus nec ornare." +
                                     " Mauris ac nisi sit amet erat feugiat consequat id sit amet erat. Integer at erat vitae est volutpat gravida sit amet nec velit." + 
                                     " Phasellus et faucibus ex, id feugiat mi. Etiam justo est, sodales nec convallis non, pulvinar in nulla." + 
