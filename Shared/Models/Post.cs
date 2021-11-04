@@ -32,7 +32,7 @@ namespace Shared.Models
 
         [Required]
         [MaxLength(128)]
-        public string Aurthor { get; set; }
+        public string Author { get; set; }
 
         [Required]
         public int CategoryId { get; set; }
