@@ -17,7 +17,7 @@ namespace Shared.Models
         
         [Required]
         [MaxLength(512)]
-        public int Excerpt { get; set; }
+        public string Excerpt { get; set; }
 
         [Required]
         [MaxLength(65536)]
