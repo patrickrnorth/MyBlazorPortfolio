@@ -15,14 +15,16 @@ namespace Server.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly AppDBContext _appDBContext;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public CategoriesController(AppDBContext appDBContext)
+        public CategoriesController(AppDBContext appDBContext, IWebHostEnvironment webHostEnvironment)
         {
             _appDBContext = appDBContext;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         #region CRUD operations
-        
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -60,6 +62,136 @@ namespace Server.Controllers
             return Ok(category);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] Category categoryToCreate)
+        {
+            try
+            {
+                if(categoryToCreate == null)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                if(ModelState.IsValid == false)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                await _appDBContext.Categories.AddAsync(categoryToCreate);
+
+                bool changesPersistedToDatabase = await PersistChangesToDatabase();
+
+                if(changesPersistedToDatabase == false)
+                {
+                    return StatusCode(500, "Something went wrong on our side. Please contact the administrator.");
+                }
+                else
+                {
+                    return Created("Create", categoryToCreate);
+                }
+
+            }
+            catch (Exception e)
+            {
+
+               return StatusCode(500, $"Something went wrong on our side. Please contact the administrator. Error message: {e.Message}.");
+            }
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] Category updatedCategory)
+        {
+            try
+            {
+                if (id < 1 || updatedCategory == null || id != updatedCategory.CategoryId)
+                {   
+                    return BadRequest(ModelState);
+                }
+
+                bool exists = await _appDBContext.Categories.AnyAsync(category => category.CategoryId == id);
+
+                if (exists == false)
+                {
+                    return NotFound();
+                }
+
+                if (ModelState.IsValid == false)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                _appDBContext.Categories.Update(updatedCategory);
+
+                bool changesPersistedToDatabase = await PersistChangesToDatabase();
+
+                if (changesPersistedToDatabase == false)
+                {
+                    return StatusCode(500, "Something went wrong on our side. Please contact the administrator.");
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Something went wrong on our side. Please contact the administrator. Error message: {e.Message}.");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                if (id < 1)
+                {
+                    
+                    return BadRequest(ModelState);
+                }
+
+                bool exists = await _appDBContext.Categories.AnyAsync(category => category.CategoryId == id);
+
+                if (exists == false)
+                {
+                    return NotFound();
+                }
+
+                if (ModelState.IsValid == false)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                Category categoryToDelete = await GetCategoryByCategoryId(id, false);
+
+                if (categoryToDelete.ThumbnailImagePath != "uploads/placeholder.jpg")
+                {
+                    string filename = categoryToDelete.ThumbnailImagePath.Split('/').Last();
+
+                    System.IO.File.Delete($"{_webHostEnvironment.ContentRootPath}\\wwwroot\\uploads\\{filename}");
+                }    
+
+                _appDBContext.Categories.Remove(categoryToDelete);
+
+                bool changesPersistedToDatabase = await PersistChangesToDatabase();
+
+                if (changesPersistedToDatabase == false)
+                {
+                    return StatusCode(500, "Something went wrong on our side. Please contact the administrator.");
+                }
+                else
+                {
+                    return NoContent();
+                }
+
+            }
+            catch (Exception e)
+            {
+
+                return StatusCode(500, $"Something went wrong on our side. Please contact the administrator. Error message: {e.Message}.");
+            }
+        }
 
         #endregion
 
