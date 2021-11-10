@@ -128,8 +128,9 @@ namespace Server.Controllers
                 }
                 else
                 {
-                    updatedPost.PublishDate = String.Empty;
+                    updatedPost.PublishDate = string.Empty;
                 }
+
                 //Detach oldPost from EF, else it can't be updated.
                 _appDBContext.Entry(oldPost).State = EntityState.Detached;
 

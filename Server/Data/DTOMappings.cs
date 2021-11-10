@@ -7,7 +7,7 @@ internal sealed class DTOMappings : Profile
 {
     public DTOMappings()
     {
-        CreateMap<BarrierPostPhaseException, PostDTO>().ReverseMap();
+        CreateMap<Post, PostDTO>().ReverseMap();
     }
 }
 
