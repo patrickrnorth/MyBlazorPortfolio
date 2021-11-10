@@ -1,0 +1,40 @@
+﻿@code
+{
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+    private const string AdminIndexPageUri = "/admin";
+    private static string s_adminCategoriesPageUri = $"{AdminIndexPageUri}/categories";
+    private static string s_adminPageUri = $"{AdminIndexPageUri}/posts";
+
+    private bool IsPageActive(string pageToCheckUri)
+    {
+        // Skip(2) to remove https://.
+        string[] currentUriSpliteBetweenSlashes = NavigationManager.Uri.Split('/').Skip(2).ToArray();
+
+        if (pageToCheckUri == AdminIndexPageUri)
+        {
+            if (currentUriSpliteBetweenSlashes.Last() == "admin")
+            {
+                return true;
+            }
+        }
+        else
+        {
+            // Skip(2) to remove the starting slash and the admin
+            string[] pageToCheckUriSpliteBetweenSlashes = pageToCheckUri.Split('/').Skip(2).ToArray();
+
+            foreach (string currentUriPart in currentUriSpliteBetweenSlashes)
+            {
+                foreach (string pageToCheckUriPart in pageToCheckUriSpliteBetweenSlashes)
+                {
+                    if (pageToCheckUriPart == currentUriPart)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        // If the code gets here pageToCheckUri is not the active page. So return false.
+        return false;
+    }
+}
