@@ -4,7 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
 	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>	  
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>898a9a1a-1bb8-4b17-9cbd-47c341821e92</UserSecretsId>	  
   </PropertyGroup>
 
   <ItemGroup>
