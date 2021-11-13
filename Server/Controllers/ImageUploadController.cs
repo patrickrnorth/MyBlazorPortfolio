@@ -13,7 +13,7 @@ namespace Server.Controllers
 
         public ImageUploadController(IWebHostEnvironment webHostEnvironment)
         {
-            this.webHostEnvironment = webHostEnvironment;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpPost]
@@ -26,7 +26,7 @@ namespace Server.Controllers
                     return BadRequest(ModelState);
                 }
 
-                if (UploadedImage.OldImagePath != String.Empty)
+                if (uploadedImage.OldImagePath != String.Empty)
                 {
                     if (uploadedImage.OldImagePath != "uploads/placeholder.jpg")
                     {
@@ -40,10 +40,10 @@ namespace Server.Controllers
 
                 string fullImageFileSystemPath = $"{_webHostEnvironment.ContentRootPath}\\wwwroot\\uploads\\{imageFileName}";
 
-                FileStream fileStream = System.IO.File.Create(fullImageFileSystem);
+                FileStream fileStream = System.IO.File.Create(fullImageFileSystemPath);
 
                 byte[] imageContentAsByteArray = Convert.FromBase64String(uploadedImage.NewImageBase64Content);
-                await FileStream.writeasync(imageContentAsByteArray, 0,imageContentAsByteArray.Length);
+                await fileStream.WriteAsync(imageContentAsByteArray, 0,imageContentAsByteArray.Length);
                 fileStream.Close();
 
                 string relativeFilePathWithoutTradingSlashes = $"uploads/{imageFileName}";
