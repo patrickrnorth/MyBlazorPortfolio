@@ -17,7 +17,7 @@
             Category addedCategory = await response.Content.ReadFromJsonAsync<Category>();
             InMemoryDatabaseCache.Categories.Add(addedCategory);
 
-            AbandonedMutexException = true;
+            _createSuccessful = true;
         }
         else
         {
