@@ -1,7 +1,8 @@
 ﻿@page "/admin/categories"
+@using System.Net
 
 <main class="admin-area-main">
-    
+
     <Client.Components.Admin.Sidebar />
 
     <div class="admin-area-content container-fluid bg-white">
@@ -14,12 +15,12 @@
 
                 @if (InMemoryDatabaseCache.Categories == null)
                 {
-                   <LoadingDot />
+                    <LoadingDot />
                 }
                 else
                 {
                     <a href="/admin/categories/create" class="btn btn-success shadow me-5 md-f-size-1-5">
-                        <i class="fas fa-plus"></i> Create category    
+                        <i class="fas fa-plus"></i> Create category
                     </a>
 
                     <button @onclick="() => InMemoryDatabaseCache.GetCategoriesFromDatabaseAndCache()" class="btn btn-primary shadow md-f-size-1-5">
@@ -82,8 +83,8 @@
                     }
                 }
 
-                    
-                
+
+
 
             </div>
 
@@ -109,6 +110,69 @@
     }
 
     public void Dispose() => InMemoryDatabaseCache.OnCategoriesDataChanged -= StateHasChanged;
+
+    [Inject] HttpClient HttpClient { get; set; }
+    private bool _attemptingToDeleteACategory = false;
+    private bool _successfullyDeletedACategory = false;
+    private bool _unsuccessfullyTriedToDeleteACategory = false;
+    private string _reasonUnsuccessfullyTriedToDeleteACategory = null;
+    private async void DeleteCategory(Category categoryToDelete)
+    {
+        if (categoryToDelete.Posts != null && categoryToDelete.Posts.Count != 0)
+        {
+            string postTitlesThatMustBeDeletedFirst = string.Empty;
+
+            for (var i = 0; i < categoryToDelete.Posts.Count; i++)
+            {
+                if (i == categoryToDelete.Posts.Count - 1)
+                {
+                    //Last Interation
+                    postTitlesThatMustBeDeletedFirst += $"\"{categoryToDelete.Posts[i].Title}\"";
+
+                }
+                else if (i == categoryToDelete.Posts.Count - 2)
+                {
+                    // Second last iteration
+                    postTitlesThatMustBeDeletedFirst += $"\"{categoryToDelete.Posts[i].Title}\" and ";
+                }
+                else
+                {
+                    // Second last iteration
+                    postTitlesThatMustBeDeletedFirst += $"\"{categoryToDelete.Posts[i].Title}\",  ";
+                }
+
+                _reasonUnsuccessfullyTriedToDeleteACategory = $"The category still has posts in it. Please delete the psots title {postTitlesThatMustBeDeletedFirst} first.";
+                _unsuccessfullyTriedToDeleteACategory = true;
+            }
+        }
+        else
+        {
+            _attemptingToDeleteACategory = true;
+
+            HttpResponseMessage response = await HttpClient.DeleteAsync($"{APIEndpoints.s_categories}/{categoryToDelete.CategoryId}");
+
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                if (InMemoryDatabaseCache.Categories.Remove(categoryToDelete))
+                {
+                    _successfullyDeletedACategory = true;
+                }
+                else
+                {
+                    _reasonUnsuccessfullyTriedToDeleteACategory = "An unexpected has occured. Please try again and if the issue persists contact the administrator.";
+                    _unsuccessfullyTriedToDeleteACategory = true;
+                }
+            }
+            else
+            {
+                _reasonUnsuccessfullyTriedToDeleteACategory = $"The API didn't return an HttpStatusCode.NoContent status code. Instead the API returned the status code {response.StatusCode} and gave the following reason for failure: {response.ReasonPhrase}.";
+                _unsuccessfullyTriedToDeleteACategory = true;
+            }
+        }
+
+        _attemptingToDeleteACategory = false;
+        StateHasChanged();
+    }
 }
 
 
