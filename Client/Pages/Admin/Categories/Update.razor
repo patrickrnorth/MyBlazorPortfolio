@@ -11,10 +11,8 @@
                 <h1 class="mb-4">Update category</h1>
 
                 @if (_categoryToUpdate == null || _attemptingToUpdate == true)
-                {
-                    <h1>Creating category...</h1>
+                {                    
                     <LoadingDot />
-
                 }
                 else
                 {
@@ -73,7 +71,7 @@
                     {
                         <Toast IsError="false" ToastTitle="Update successfull"
                             ToastBody="Your changes have been saved to the database."
-                            ParentMethodToCallOnClickBtnClose="() => _attemptToUpdateFailed = false" />
+                            ParentMethodToCallOnClickBtnClose="() => _updateSuccessful = false" />
                     }
 
                     @if (_attemptToUpdateFailed == true)
