@@ -1,5 +1,5 @@
 ﻿@page "/admin/categories/update/{CategoryId:int}"
-@using System.Net
+@using System.Net;
 
 <main class="admin-area-main">
     <Client.Components.Admin.Sidebar />
@@ -95,7 +95,7 @@
     private Category _categoryToUpdate = null;
     protected async override Task OnParametersSetAsync()
     {
-        _categoryToUpdate = await InMemoryDatabaseCache.GetCategoriesByCategoryId(CategoryId);
+        _categoryToUpdate = await InMemoryDatabaseCache.GetCategoryByCategoryId(CategoryId,false);
 
     }
 

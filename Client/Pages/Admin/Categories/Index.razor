@@ -23,7 +23,7 @@
                         <i class="fas fa-plus"></i> Create category
                     </a>
 
-                    <button @onclick="() => InMemoryDatabaseCache.GetCategoriesFromDatabaseAndCache()" class="btn btn-primary shadow md-f-size-1-5">
+                    <button @onclick="() => InMemoryDatabaseCache.GetCategoriesFromDatabaseAndCache(true)" class="btn btn-primary shadow md-f-size-1-5">
                         <i class="fa fa-sync"></i> Refresh data
                     </button>
 
@@ -95,7 +95,7 @@
                     {
                         <Toast IsError="true" ToastTitle="Delete failed."
                             ToastBody="@($"The reason is \"{_reasonUnsuccessfullyTriedToDeleteACategory})\"Please try again and if the issue persists contact the administrator.")"
-                            ParentMethodToCallOnClickBtnClose="() => _successfullyDeletedACategory = false"/>
+                            ParentMethodToCallOnClickBtnClose="() => _unsuccessfullyTriedToDeleteACategory = false"/>
                     }
                 </div>
             </div>
@@ -113,7 +113,7 @@
 
         if (InMemoryDatabaseCache.Categories == null)
         {
-            await InMemoryDatabaseCache.GetCategoriesFromDatabaseAndCache();
+            await InMemoryDatabaseCache.GetCategoriesFromDatabaseAndCache(true);
         }
     }
 

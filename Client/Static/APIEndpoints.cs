@@ -1,6 +1,6 @@
 ﻿namespace Client.Static
 {
-    public class APIEndpoints
+    internal static class APIEndpoints
     {
 #if DEBUG
         internal const string ServerBaseUrl = "https://localhost:5003";

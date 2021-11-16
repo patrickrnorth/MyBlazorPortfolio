@@ -1,16 +1,20 @@
-﻿
-
-
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Data;
 using Shared.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Server.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Administrator")]
 
     public class CategoriesController : ControllerBase
     {
@@ -26,6 +30,7 @@ namespace Server.Controllers
         #region CRUD operations
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             List<Category> categories = await _appDBContext.Categories.ToListAsync();
@@ -35,6 +40,7 @@ namespace Server.Controllers
 
         // website.com/api/categories/withposts
         [HttpGet("withposts")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetWithPosts()
         {
             List<Category> categories = await _appDBContext.Categories
@@ -46,6 +52,7 @@ namespace Server.Controllers
 
         // website.com/api/categories/{id number here}
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(int id)
         {
             Category category = await GetCategoryByCategoryId(id, false);
@@ -55,6 +62,7 @@ namespace Server.Controllers
 
         // website.com/api/categories/
         [HttpGet("withposts/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetWithPosts(int id)
         {
             Category category = await GetCategoryByCategoryId(id, true);
@@ -67,12 +75,12 @@ namespace Server.Controllers
         {
             try
             {
-                if(categoryToCreate == null)
+                if (categoryToCreate == null)
                 {
                     return BadRequest(ModelState);
                 }
 
-                if(ModelState.IsValid == false)
+                if (ModelState.IsValid == false)
                 {
                     return BadRequest(ModelState);
                 }
@@ -81,7 +89,7 @@ namespace Server.Controllers
 
                 bool changesPersistedToDatabase = await PersistChangesToDatabase();
 
-                if(changesPersistedToDatabase == false)
+                if (changesPersistedToDatabase == false)
                 {
                     return StatusCode(500, "Something went wrong on our side. Please contact the administrator.");
                 }
@@ -167,9 +175,9 @@ namespace Server.Controllers
 
                 if (categoryToDelete.ThumbnailImagePath != "uploads/placeholder.jpg")
                 {
-                    string filename = categoryToDelete.ThumbnailImagePath.Split('/').Last();
+                    string fileName = categoryToDelete.ThumbnailImagePath.Split('/').Last();
 
-                    System.IO.File.Delete($"{_webHostEnvironment.ContentRootPath}\\wwwroot\\uploads\\{filename}");
+                    System.IO.File.Delete($"{_webHostEnvironment.ContentRootPath}\\wwwroot\\uploads\\{fileName}");
                 }    
 
                 _appDBContext.Categories.Remove(categoryToDelete);

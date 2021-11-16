@@ -31,7 +31,7 @@ namespace Client.Services
             }
         }
 
-        internal async Task<Category> GetCategoriesByCategoryId(int categoryId, bool withPosts)
+        internal async Task<Category> GetCategoryByCategoryId(int categoryId, bool withPosts)
         {
             if (_categories == null)
             {
@@ -106,9 +106,9 @@ namespace Client.Services
                 {
                     List<Post> postsFromCategories = new List<Post>();
 
-                    foreach(var category in _categories)
+                    foreach (var category in _categories)
                     {
-                        if (category.Posts.Count !=0)
+                        if (category.Posts.Count != 0)
                         {
                             foreach (var post in category.Posts)
                             {
