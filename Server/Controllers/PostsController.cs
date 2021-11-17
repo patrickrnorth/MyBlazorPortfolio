@@ -38,7 +38,7 @@ namespace Server.Controllers
             return Ok(posts);
         }
 
-        [HttpGet("{dto/id}")]
+        [HttpGet("dto/{id}")]
         public async Task<IActionResult> GetDTO(int id)
         {
             Post post = await GetPostByPostId(id);
