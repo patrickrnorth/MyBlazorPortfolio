@@ -10,12 +10,12 @@
                 readOnly: false,
                 theme: 'snow',
                 bounds: quillElement
-            };
+            }; 
 
             new Quill(quillElement, options);
         },
         getQuillContent: function (quillControl) {
-            return JSON.stringify(quillControl.__quill.getContents());
+            return JSON.stringify(quillControl.__quill.getContents();
         },
         setQuillContent: function (quillControl, quillContent) {
             content = JSON.parse(quillContent);

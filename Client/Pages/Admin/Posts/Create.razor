@@ -32,10 +32,10 @@
                                 <InputSelect @bind-Value="@_postToCreate.CategoryId" class="form-control" id="postCategory">
                                     @foreach (var category in InMemoryDatabaseCache.Categories)
                                     {
-                                <option value="@category.CategoryId">@category.Name</option>
+                                        <option value="@category.CategoryId">@category.Name</option>
                                     }
-                        </InputSelect>
-                    </div>
+                                </InputSelect>
+                            </div>
                         }
 
                         <div class="form-group mb-5">
@@ -58,8 +58,8 @@
                             }
                             else
                             {
-                                <img src="@($"{APIEndpoints.ServerBaseUrl}/{_postToCreate.ThumbnailImagePath}")" class="admin-crud-form-thumbnail-image" alt="Post thumbnail image" />
-                            }
+                                <img src="@($"{APIEndpoints.ServerBaseUrl}/{_postToCreate.ThumbnailImagePath}")" class="admin-crud-form-thumbnail-image" alt="Post thumbnail image" />    
+                            }                            
 
                             <br />
 
@@ -72,9 +72,9 @@
                             <InputText @bind-Value="_postToCreate.Excerpt" class="form-control" id="postExcerpt"></InputText>
                         </div>
 
-                        <div class="form-group mb-5 flex-shrink-1">
-                            <label>Post content</label>
-                            <div @ref="_quillJSEditorDiv" class="border border-secondary p-4"></div>
+                        <div class="form-group mb-5">
+                            <label for="postContent">Post content</label>
+                            <InputText @bind-Value="_postToCreate.Content" class="form-control" id="postContent"></InputText>
                         </div>
 
                         <div class="form-group mb-5">
@@ -91,7 +91,7 @@
                             <InputText @bind-Value="_postToCreate.Author" class="form-control" id="postAuthor"></InputText>
                         </div>
 
-
+                         
 
                         <ValidationSummary />
 
@@ -112,34 +112,15 @@
 
 @code
 {
-    [Inject] InMemoryDatabaseCache InMemoryDatabaseCache { get; set; }
-	[Inject] IJSRuntime JSRuntime { get; set; }
-	private ElementReference _quillJSEditorDiv;
-	protected async override Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			if (InMemoryDatabaseCache.Categories == null)
-			{
-				await InMemoryDatabaseCache.GetCategoriesFromDatabaseAndCache(false);
-				StateHasChanged();
-			}
-
-			await JSRuntime.InvokeVoidAsync("QuillFunctions.createQuill", _quillJSEditorDiv, true);
-		}
-	}
-
-
     [Inject] HttpClient HttpClient { get; set; }
-    private PostDTO _postToCreate = new PostDTO() { ThumbnailImagePath = "uploads/placeholder.jpg" };
+    [Inject] InMemoryDatabaseCache InMemoryDatabaseCache { get; set; }
+    private PostDTO _postToCreate = new PostDTO() { ThumbnailImagePath = "uploads/placeholder.jpg"};
     private bool _attemptingToCreate = false;
     private bool _attemptToCreateFailed = false;
     private bool _createSuccessful = false;
     private async Task CreatePost()
     {
         _attemptingToCreate = true;
-
-        _postToCreate.Content = await JSRuntime.InvokeAsync<string>("QuillFunctions.getQuillContent", _quillJSEditorDiv);
 
         HttpResponseMessage response = await HttpClient.PostAsJsonAsync<PostDTO>(APIEndpoints.s_posts, _postToCreate);
 
@@ -187,15 +168,15 @@
             string byteString = Convert.ToBase64String(imageAsByteArray);
 
             UploadedImage uploadedImage = new UploadedImage()
-                {
-                    NewImageFileExtension = uploadedImageFile.Name.Substring(uploadedImageFile.Name.Length - 4),
-                    NewImageBase64Content = byteString,
-                    OldImagePath = string.Empty
-                };
+            {
+                NewImageFileExtension = uploadedImageFile.Name.Substring(uploadedImageFile.Name.Length - 4),
+                NewImageBase64Content = byteString,
+                OldImagePath = string.Empty
+            };
 
             HttpResponseMessage response = await HttpClient.PostAsJsonAsync<UploadedImage>(APIEndpoints.s_imageUpload, uploadedImage);
 
-            if (response.StatusCode == HttpStatusCode.Created)
+            if  (response.StatusCode == HttpStatusCode.Created)
             {
                 _postToCreate.ThumbnailImagePath = await response.Content.ReadAsStringAsync();
             }
