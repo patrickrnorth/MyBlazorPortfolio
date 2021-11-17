@@ -1,8 +1,7 @@
 ﻿@page "/admin/posts/update/{PostId:int}"
 @using System.Net;
 
-<AuthorizeView Roles="Administrator">
-	<Authorized Context="Auth">
+
 		<main class="admin-area-main">
 			<Client.Components.Admin.Sidebar />
 
@@ -129,11 +128,8 @@
 				</div>
 			</div>
 		</main>
-	</Authorized>
-	<NotAuthorized>
-		<Client.Components.Admin.SignIn />
-	</NotAuthorized>
-</AuthorizeView>
+	
+	
 
 @code
 {

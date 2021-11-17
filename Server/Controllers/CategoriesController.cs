@@ -14,7 +14,7 @@ namespace Server.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Administrator")]
+    
 
     public class CategoriesController : ControllerBase
     {
