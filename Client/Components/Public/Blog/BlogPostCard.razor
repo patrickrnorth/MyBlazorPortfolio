@@ -2,7 +2,7 @@
     <img src="@($"{APIEndpoints.ServerBaseUrl}/{Post.ThumbnailImagePath}")" class="card-img-top" alt="Post thumbnail image" />
     <div class="card-body">
         <h3 class="card-title">@Post.Title</h3>
-        <p class="text-muted">By John Doe on @Post.PublishDate.Split(' ').First()</p>
+        <p class="text-muted">By Patrick North on @Post.PublishDate.Split(' ').First()</p>
         <p class="card-text">@(String.Join(" ", Post.Excerpt.Split().Take(25).ToArray()))...</p>
     </div>
 
